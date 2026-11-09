@@ -1,6 +1,7 @@
 # Pong Game
 
-A classic Pong game made with C++ and [raylib 4.5.0](https://github.com/raysan5/raylib/releases/tag/4.5.0). Control the right paddle and play against a computer-controlled opponent.
+A classic Pong game written in C++ with [raylib 4.5.0](https://github.com/raysan5/raylib/releases/tag/4.5.0).
+Control the right paddle and play against a computer-controlled opponent.
 
 ## Controls
 
@@ -8,33 +9,65 @@ A classic Pong game made with C++ and [raylib 4.5.0](https://github.com/raysan5/
 - **Down Arrow**: move the player paddle down.
 - **Close the window**: quit the game.
 
+## Project structure
+
+```text
+PongGame/
+├── src/
+│   ├── main.cpp       # Initializes raylib and runs the game loop
+│   ├── Game.h/.cpp    # Game state, scores, collisions, and court drawing
+│   ├── Ball.h/.cpp    # Ball movement, wall bounces, and resets
+│   └── Paddle.h/.cpp  # Player and CPU paddle behaviour
+├── CMakeLists.txt     # CMake build configuration
+├── Makefile           # w64devkit/GNU Make build configuration
+└── README.md
+```
+
 ## Requirements
 
 - Windows
 - [raylib 4.5.0](https://github.com/raysan5/raylib/releases/tag/4.5.0)
-- [w64devkit](https://github.com/skeeto/w64devkit/releases) with GNU Make and a C++ compiler
+- For the Makefile workflow: [w64devkit](https://github.com/skeeto/w64devkit/releases), including GNU Make and a C++ compiler
+- For the CMake workflow: [CMake](https://cmake.org/download/)
 
-The build command below assumes w64devkit is installed at `C:/raylib/w64devkit` and raylib at `C:/raylib/raylib`. Change those paths if your setup differs.
+The examples below assume w64devkit is installed at `C:/raylib/w64devkit` and raylib is located at `C:/raylib/raylib`.
+Adjust these paths when your installation uses different locations.
 
-## Build
+## Build with Makefile
 
-Run this command from the project directory in PowerShell:
+Run this from the project directory in PowerShell:
 
 ```powershell
-C:/raylib/w64devkit/bin/make.exe RAYLIB_PATH=C:/raylib/raylib PROJECT_NAME=main OBJS=main.cpp
+C:/raylib/w64devkit/bin/make.exe RAYLIB_PATH=C:/raylib/raylib PROJECT_NAME=main
 ```
 
-This creates `main.exe` in the project directory.
+This produces `main.exe` in the project root.
+
+## Build with CMake
+
+Run this from the project directory in PowerShell:
+
+```powershell
+cmake -S . -B build -DRAYLIB_ROOT=C:/raylib/raylib
+cmake --build build
+```
+
+`CMakeLists.txt` lists the project source files, chooses C++14, adds raylib, and creates the `PongGame` executable. The `RAYLIB_ROOT` option points CMake to a local raylib source directory.
+
+If raylib has already been installed as a CMake package, omit `-DRAYLIB_ROOT=...`.
 
 ## Run
+
+After the Makefile build:
 
 ```powershell
 ./main.exe
 ```
 
-If Windows reports that a compiler DLL is missing, run the game from a w64devkit terminal or add `C:/raylib/w64devkit/bin` to your `PATH`.
+After the CMake build:
 
-## Project files
+```powershell
+./build/PongGame.exe
+```
 
-- `main.cpp` - game source code.
-- `Makefile` - build configuration.
+If Windows reports a missing compiler DLL, run the game in a w64devkit terminal or add `C:/raylib/w64devkit/bin` to your `PATH`.
